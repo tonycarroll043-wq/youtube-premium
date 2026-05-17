@@ -3,10 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "electron:build": "vite build && npx electron-packager . \"YouTube Premium\" --platform=win32 --arch=x64 --out=release --overwrite --asar --prune=true --ignore=\"^/src\" --ignore=\"^/.claude\" --ignore=\"^/vite.config.js\" --ignore=\"^/tailwind.config.js\" --ignore=\"^/postcss.config.js\" --ignore=\"^/index.html\""
   },
   "dependencies": {
     "lucide-react": "^0.471.0",
@@ -15,10 +18,39 @@
     "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
+    "@electron/packager": "^20.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^33.4.1",
+    "electron-builder": "^25.1.8",
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17",
-    "vite": "^6.0.11"
+    "vite": "^6.0.11",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.youtube.premium.clone",
+    "productName": "YouTube Premium",
+    "directories": {
+      "output": "C:\\Users\\tonyc\\Desktop\\yt-release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "sign": null,
+      "signingHashAlgorithms": null
+    }
   }
 }
